@@ -108,6 +108,55 @@ The project uses:
 - Tailwind CSS for styling
 - Framer Motion for animations
 
+## Deployment
+
+### Vercel Deployment
+
+This project is configured for easy deployment on Vercel:
+
+1. **Connect to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign in with your GitHub account
+   - Click "Add New Project"
+   - Import the repository: `brahmakoshtech/Brahmakoshuser`
+
+2. **Configure Environment Variables:**
+   - In Vercel project settings, go to "Environment Variables"
+   - Add the following variables:
+     - `VITE_USER_ID` - Your API user ID
+     - `VITE_API_KEY` - Your API key
+     - `VITE_BASE_URL` - API base URL (default: `https://json.astrologyapi.com/v1/`)
+
+3. **Deploy:**
+   - Vercel will automatically detect the Vite framework
+   - Click "Deploy" and your app will be live!
+
+4. **Custom Domain (Optional):**
+   - In project settings, go to "Domains"
+   - Add your custom domain
+
+### Manual Deployment
+
+```bash
+# Build the project
+npm run build
+
+# The dist folder contains the production build
+# Upload the dist folder contents to your hosting provider
+```
+
+## Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_USER_ID=your_user_id_here
+VITE_API_KEY=your_api_key_here
+VITE_BASE_URL=https://json.astrologyapi.com/v1/
+```
+
+**Note:** Never commit `.env` files to Git. They are already in `.gitignore`.
+
 ## License
 
 Private - All rights reserved
