@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Sparkles } from 'lucide-react'
-import BrahmakoshLogo from './BrahmakoshLogo'
 
 function Hero() {
   return (
@@ -35,8 +34,8 @@ function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 md:py-8 lg:py-0 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 lg:gap-12 items-center">
           {/* Left Side - Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -58,22 +57,22 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+              className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight"
             >
               <span className="bg-gradient-to-r from-gold-600 via-gold-700 to-gold-800 bg-clip-text text-transparent">
                 Brahmakosh
               </span>
               <br />
-              <span className="text-gray-900">Discover Your</span>
+              <span className="text-gray-900">Your Spiritual Operating System</span>
               <br />
-              <span className="text-gray-900">Life's True Path</span>
+              {/* <span className="text-gray-900">Life's True Path</span> */}
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-xl text-gray-600 mb-10 max-w-xl leading-relaxed"
+              className="text-lg sm:text-xl md:text-lg lg:text-xl text-gray-600 mb-10 max-w-xl leading-relaxed"
             >
               Get accurate Kundli, Horoscope, Panchang, and Numerology reports. 
               Make informed life decisions with the wisdom of Vedic Astrology.
@@ -109,34 +108,58 @@ function Hero() {
 
           {/* Right Side - Logo */}
           <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.8 }}
+            initial={{ opacity: 0, x: 50, scale: 0.5 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="flex items-center justify-center lg:justify-end z-10"
+            transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
+            className="flex items-center justify-center lg:justify-end z-10 w-full max-w-full overflow-visible"
           >
-            <div className="relative">
-              {/* Glow Effect */}
+            <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] aspect-square flex items-center justify-center">
+              {/* Enhanced Glow Effect */}
               <motion.div
                 animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.5, 0.3],
+                  scale: [1, 1.2, 1],
+                  opacity: [0.4, 0.7, 0.4],
                 }}
                 transition={{
                   duration: 3,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
-                className="absolute inset-0 bg-gold-400/20 rounded-full blur-3xl"
+                className="absolute inset-0 rounded-full blur-3xl"
                 style={{ 
-                  width: '120%', 
-                  height: '120%', 
-                  top: '-10%', 
-                  left: '-10%' 
+                  background: 'radial-gradient(circle, rgba(217, 119, 6, 0.4) 0%, rgba(249, 115, 22, 0.3) 30%, rgba(245, 158, 11, 0.2) 60%, transparent 100%)',
+                  width: '180%', 
+                  height: '180%', 
+                  top: '-40%', 
+                  left: '-40%' 
                 }}
               />
               
               {/* Animated Brahmakosh Logo */}
-              <BrahmakoshLogo />
+              <motion.img
+                src="/brahmakosh-logo.png"
+                alt="Brahmakosh Logo"
+                className="w-full h-full object-contain relative z-10 cursor-pointer"
+                initial={{ scale: 0 }}
+                animate={{ 
+                  scale: [1, 1.1, 1]
+                }}
+                whileHover={{
+                  scale: 1.2
+                }}
+                transition={{
+                  scale: {
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: 1.2
+                  },
+                  whileHover: {
+                    duration: 0.3,
+                    ease: 'easeOut'
+                  }
+                }}
+              />
             </div>
           </motion.div>
         </div>
