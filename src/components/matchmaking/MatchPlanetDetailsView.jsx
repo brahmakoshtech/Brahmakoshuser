@@ -52,3 +52,9 @@ function MatchPlanetDetailsView({ data }) {
 export default MatchPlanetDetailsView
 
 
+
+
+
+
+
+

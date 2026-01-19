@@ -131,3 +131,9 @@ All API calls use Basic Authentication:
 - Navbar → `/panchang` (direct link)
 
 
+
+
+
+
+
+

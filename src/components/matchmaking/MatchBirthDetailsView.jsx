@@ -115,3 +115,9 @@ function MatchBirthDetailsView({ data }) {
 export default MatchBirthDetailsView
 
 
+
+
+
+
+
+

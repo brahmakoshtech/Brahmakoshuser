@@ -202,3 +202,9 @@ function AdvancedPanchangView({ data }) {
 export default AdvancedPanchangView
 
 
+
+
+
+
+
+

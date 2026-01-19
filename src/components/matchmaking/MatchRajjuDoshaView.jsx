@@ -38,3 +38,9 @@ function MatchRajjuDoshaView({ data }) {
 export default MatchRajjuDoshaView
 
 
+
+
+
+
+
+

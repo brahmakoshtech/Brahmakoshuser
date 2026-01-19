@@ -77,3 +77,9 @@ function MatchManglikReportView({ data }) {
 export default MatchManglikReportView
 
 
+
+
+
+
+
+

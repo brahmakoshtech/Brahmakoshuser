@@ -100,3 +100,9 @@ function Kundli() {
 export default Kundli
 
 
+
+
+
+
+
+

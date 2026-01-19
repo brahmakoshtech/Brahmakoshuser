@@ -25,3 +25,9 @@ function FestivalView({ data }) {
 export default FestivalView
 
 
+
+
+
+
+
+

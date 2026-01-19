@@ -97,3 +97,9 @@ function MatchAshtakootPointsView({ data }) {
 export default MatchAshtakootPointsView
 
 
+
+
+
+
+
+

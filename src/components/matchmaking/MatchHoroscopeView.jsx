@@ -83,3 +83,9 @@ function MatchHoroscopeView({ data }) {
 export default MatchHoroscopeView
 
 
+
+
+
+
+
+

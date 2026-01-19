@@ -56,3 +56,9 @@ function ChaughadiyaView({ data }) {
 export default ChaughadiyaView
 
 
+
+
+
+
+
+

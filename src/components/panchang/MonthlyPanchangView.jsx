@@ -35,3 +35,9 @@ function MonthlyPanchangView({ data }) {
 export default MonthlyPanchangView
 
 
+
+
+
+
+
+

@@ -31,3 +31,9 @@ function LagnaTableView({ data }) {
 export default LagnaTableView
 
 
+
+
+
+
+
+

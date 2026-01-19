@@ -46,3 +46,9 @@ function PanchangChartView({ data }) {
 export default PanchangChartView
 
 
+
+
+
+
+
+
