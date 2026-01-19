@@ -11,6 +11,7 @@ import MatchMaking from '../pages/MatchMaking'
 import Dashboard from '../pages/Dashboard'
 import Login from '../pages/Login'
 import Signup from '../pages/Signup'
+import PrivacyPolicy from '../pages/PrivacyPolicy'
 
 function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
     </PageWrapper>
   )

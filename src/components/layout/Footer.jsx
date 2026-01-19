@@ -19,7 +19,7 @@ function Footer() {
     Support: [
       { label: 'Help Center', path: '#' },
       { label: 'FAQs', path: '#' },
-      { label: 'Privacy Policy', path: '#' },
+      { label: 'Privacy Policy', path: '/privacy-policy' },
     ],
   }
 
@@ -84,7 +84,7 @@ function Footer() {
             © {currentYear} Brahmakosh. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="#" className="text-sm text-gray-600 hover:text-gold-600 transition-colors">
+            <Link to="/privacy-policy" className="text-sm text-gray-600 hover:text-gold-600 transition-colors">
               Privacy Policy
             </Link>
             <Link to="#" className="text-sm text-gray-600 hover:text-gold-600 transition-colors">
