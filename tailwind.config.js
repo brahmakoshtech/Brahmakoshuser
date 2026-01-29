@@ -119,6 +119,9 @@ export default {
           '100%': { boxShadow: '0 0 20px rgba(245, 158, 11, 0.8)' },
         },
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
     },
   },
   plugins: [],

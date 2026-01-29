@@ -336,8 +336,8 @@ function PrivacyPolicy() {
           <ul className="space-y-2 text-gray-700">
             <li>
               By email:{' '}
-              <a className="text-gold-700 font-medium hover:underline" href="mailto:hello@brahmakosh.com">
-                hello@brahmakosh.com
+              <a className="text-gold-700 font-medium hover:underline" href="mailto:contact@brahmakosh.com">
+                contact@brahmakosh.com
               </a>
             </li>
             <li>
