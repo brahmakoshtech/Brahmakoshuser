@@ -200,7 +200,7 @@ function ComingSoon() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mb-8 sm:mb-12 px-2"
+          className="text-center mb-6 sm:mb-8 px-2"
         >
           <p className="text-sm min-[360px]:text-base sm:text-lg text-gray-700 flex flex-wrap items-center justify-center gap-1 min-[360px]:gap-2">
             <span className="text-orange-500">•</span>
@@ -212,6 +212,30 @@ function ComingSoon() {
             <span className="text-orange-500">•</span>
             <span className="font-medium">Intelligence</span>
           </p>
+        </motion.div>
+
+        {/* Tagline Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mb-8 sm:mb-10 px-4"
+        >
+          <div className="max-w-2xl mx-auto text-center bg-white/60 backdrop-blur-sm rounded-2xl shadow-md sm:shadow-lg px-4 sm:px-8 py-5 sm:py-6 border border-orange-100">
+            <p className="text-base sm:text-lg text-gray-800 font-serif italic mb-2">
+              <span className="font-semibold">
+                <span className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-clip-text text-transparent">
+                  Brah
+                </span>
+                <span className="text-gray-900">makosh</span>
+              </span>{' '}
+              is not an app.
+            </p>
+            <p className="text-base sm:text-lg text-gray-800 font-serif italic">
+              It is a system designed to walk with you—
+              <span className="block sm:inline"> through questions, clarity, and consciousness.</span>
+            </p>
+          </div>
         </motion.div>
 
         {/* Coming Soon Badge */}

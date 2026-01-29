@@ -238,7 +238,7 @@ function Home() {
             </Link>
           </motion.div>
         </div>
-      </section> */}
+      </section> */
     </div>
   )
 }
