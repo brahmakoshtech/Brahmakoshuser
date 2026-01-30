@@ -1,30 +1,69 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Mail, Sparkles, X, Users } from 'lucide-react'
-import { useState } from 'react'
+import { Mail, Sparkles, X, Users, Rocket, Smartphone, Globe } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { getRegistrationCount, registerEmail } from '../services/registrationApi'
 
 function ComingSoon() {
   const [email, setEmail] = useState('')
+  const [platform, setPlatform] = useState('web')
   const [submitted, setSubmitted] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
-  const registeredCount = 10121
+  const [registeredCount, setRegisteredCount] = useState(12478)
+  const [loading, setLoading] = useState(false)
+  const [isDuplicate, setIsDuplicate] = useState(false)
 
-  const handleSubmit = (e) => {
+  // Fetch count on component mount
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const count = await getRegistrationCount()
+        setRegisteredCount(count)
+      } catch (error) {
+        console.error('Error fetching count:', error)
+      }
+    }
+    fetchCount()
+  }, [])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (email) {
-      // Here you can add email submission logic
-      window.location.href = `mailto:contact@brahmakosh.com?subject=Early Access Registration&body=Email: ${email}`
-      setSubmitted(true)
-      setShowPopup(true)
-      setEmail('')
-      setTimeout(() => {
-        setSubmitted(false)
-      }, 3000)
+    if (email && !loading) {
+      setLoading(true)
+      setIsDuplicate(false)
+      try {
+        const result = await registerEmail(email, platform)
+        setRegisteredCount(result.count)
+        setSubmitted(true)
+        setIsDuplicate(false)
+        setShowPopup(true)
+        setEmail('')
+        setTimeout(() => {
+          setSubmitted(false)
+        }, 3000)
+      } catch (error) {
+        // Check if it's a duplicate email error (409 status or message contains "already registered")
+        if (error.status === 409 || (error.message && error.message.toLowerCase().includes('already registered'))) {
+          setIsDuplicate(true)
+          setShowPopup(true)
+          // Fetch current count to show in popup
+          try {
+            const count = await getRegistrationCount()
+            setRegisteredCount(count)
+          } catch (err) {
+            console.error('Error fetching count:', err)
+          }
+        } else {
+          alert(error.message || 'Failed to register. Please try again.')
+        }
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
+    <div className="min-h-screen relative overflow-hidden bg-white flex flex-col items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
       {/* Vibrant Background with Gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
         {/* Animated Gradient Orbs */}
@@ -104,179 +143,199 @@ function ComingSoon() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-12">
           {/* Left Side - All Content (Desktop) / Centered (Mobile) */}
           <div className="flex flex-col items-center lg:items-start lg:w-1/2 lg:pr-8 order-2 lg:order-1">
-            {/* Main Title */}
+            {/* Logo at Top - Mobile Only */}
             <motion.div
+              initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 1.2, ease: 'easeOut' }}
+              className="mb-6 lg:hidden flex justify-center relative"
+            >
+              {/* Glow Effect */}
+              <motion.div
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.4, 0.7, 0.4],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="absolute inset-0 bg-gradient-to-r from-orange-400/50 via-yellow-400/50 to-orange-400/50 rounded-full blur-2xl"
+                style={{ width: '120%', height: '120%', top: '-10%', left: '-10%' }}
+              />
+              
+              {/* Rotating Logo */}
+              <motion.img
+                src="/brahmakosh-logo.png"
+                alt="Brahmakosh Logo"
+                className="w-48 h-48 min-[360px]:w-56 min-[360px]:h-56 sm:w-64 sm:h-64 object-contain relative z-10"
+                animate={{
+                  rotate: [0, 5, -5, 0],
+                  scale: [1, 1.05, 1],
+                }}
+                transition={{
+                  rotate: {
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  },
+                  scale: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  },
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  rotate: 360,
+                  transition: { duration: 0.8 },
+                }}
+              />
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-3 text-center lg:text-left w-full"
+            >
+              Coming Soon
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center lg:text-left mb-3 sm:mb-4 w-full px-2"
+              className="text-base sm:text-lg lg:text-xl text-gray-900 mb-8 text-center lg:text-left"
             >
-              <h1 className="text-3xl min-[360px]:text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold mb-2 leading-tight break-words">
-                <motion.span
-                  className="inline-block bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-clip-text text-transparent"
-                  animate={{
-                    backgroundPosition: ['0%', '100%', '0%'],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                  style={{
-                    backgroundSize: '200%',
-                  }}
-                >
-                  BRAHMA
-                </motion.span> 
-                <motion.span
-                  className="inline-block text-gray-900"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  KOSH
-                </motion.span>
-              </h1>
-            </motion.div>
+              Be the first to experience <span className="font-semibold text-orange-600">Brahmakosh</span> on your device
+            </motion.p>
 
-            {/* Subtitle */}
+            {/* Devotees Waiting Section - Pill Shape */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-center lg:text-left mb-6 sm:mb-8 px-2 w-full"
+              className="w-full mb-8"
             >
-              <p className="text-base min-[360px]:text-lg sm:text-xl md:text-2xl lg:text-xl xl:text-2xl font-medium bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-clip-text text-transparent">
-                Your Spiritual Operating System
-              </p>
+              <div className="bg-gradient-to-r from-orange-100 to-amber-100 rounded-full px-6 py-4 flex items-center justify-center gap-3 shadow-sm border border-orange-200">
+                <Sparkles className="text-orange-600 flex-shrink-0" size={24} />
+                <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  {registeredCount.toLocaleString()}
+                </span>
+                <span className="text-base sm:text-lg text-gray-700">
+                  devotees waiting
+                </span>
+              </div>
             </motion.div>
 
-            {/* Features List */}
+            {/* Platform Selection */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="w-full max-w-md mb-6"
+            >
+              <p className="text-sm sm:text-base text-gray-700 mb-4 text-center lg:text-left">
+                Choose your platform
+              </p>
+              <div className="flex items-center justify-center lg:justify-start gap-3">
+                {/* Android Button */}
+                <motion.button
+                  type="button"
+                  onClick={() => setPlatform('android')}
+                  className={`flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 transition-all ${
+                    platform === 'android'
+                      ? 'bg-orange-50 border-orange-500 shadow-md'
+                      : 'bg-white border-gray-200 hover:border-orange-300'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    className={`w-8 h-8 sm:w-10 sm:h-10 ${platform === 'android' ? 'text-orange-600' : 'text-gray-600'}`}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5506 0 .9989.4482.9989.9993.0001.5511-.4483.9997-.9989.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5506 0 .9989.4482.9989.9993 0 .5511-.4483.9997-.9989.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1349 1.0987L4.8429 5.4467a.4161.4161 0 00-.5676-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.186.8532 13.0814 0 15.5001h24c-.8535-2.4186-2.6892-4.3137-5.1225-6.1787" />
+                  </svg>
+                  <span className={`text-xs sm:text-sm mt-1 font-medium ${platform === 'android' ? 'text-orange-600' : 'text-gray-700'}`}>
+                    Android
+                  </span>
+                </motion.button>
+
+                {/* iOS Button */}
+                <motion.button
+                  type="button"
+                  onClick={() => setPlatform('ios')}
+                  className={`flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 transition-all ${
+                    platform === 'ios'
+                      ? 'bg-orange-50 border-orange-500 shadow-md'
+                      : 'bg-white border-gray-200 hover:border-orange-300'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    className={`w-8 h-8 sm:w-10 sm:h-10 ${platform === 'ios' ? 'text-orange-600' : 'text-gray-900'}`}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                  </svg>
+                  <span className={`text-xs sm:text-sm mt-1 font-medium ${platform === 'ios' ? 'text-orange-600' : 'text-gray-700'}`}>
+                    iOS
+                  </span>
+                </motion.button>
+
+                {/* Web Button */}
+                <motion.button
+                  type="button"
+                  onClick={() => setPlatform('web')}
+                  className={`flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 transition-all ${
+                    platform === 'web'
+                      ? 'bg-orange-50 border-orange-500 shadow-md'
+                      : 'bg-white border-gray-200 hover:border-orange-300'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Globe className={`w-8 h-8 sm:w-10 sm:h-10 ${platform === 'web' ? 'text-orange-600' : 'text-gray-900'}`} />
+                  <span className={`text-xs sm:text-sm mt-1 font-medium ${platform === 'web' ? 'text-orange-600' : 'text-gray-700'}`}>
+                    Web
+                  </span>
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* Email Registration Form */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-center lg:text-left mb-6 sm:mb-8 px-2 w-full"
-            >
-              <p className="text-sm min-[360px]:text-base sm:text-lg text-gray-700 flex flex-wrap items-center justify-center lg:justify-start gap-1 min-[360px]:gap-2">
-                <span className="text-orange-500">•</span>
-                <span className="font-medium">Sprituality</span>
-                <span className="text-orange-500">•</span>
-                <span className="font-medium">Astrology</span>
-                <span className="text-orange-500">•</span>
-                <span className="font-medium">Companion</span>
-                <span className="text-orange-500">•</span>
-                <span className="font-medium">Intelligence</span>
-              </p>
-            </motion.div>
-
-            {/* Tagline Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className="mb-8 sm:mb-10 px-2 w-full"
-            >
-              <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left bg-white/60 backdrop-blur-sm rounded-2xl shadow-md sm:shadow-lg px-4 sm:px-8 py-5 sm:py-6 border border-orange-100">
-                <p className="text-base sm:text-lg text-gray-800 font-serif italic mb-2">
-                  <span className="font-semibold">
-                    <span className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-clip-text text-transparent">
-                      Brahma
-                    </span>
-                    <span className="text-gray-900">kosh</span>
-                  </span>{' '}
-                  is not an app.
-                </p>
-                <p className="text-base sm:text-lg text-gray-800 font-serif italic">
-                  It is a system designed to walk with you—
-                  <span className="block sm:inline"> through questions, clarity, and consciousness.</span>
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Coming Soon Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="mb-8 sm:mb-12"
-            >
-              <motion.div
-                className="inline-block px-6 min-[360px]:px-8 py-2.5 min-[360px]:py-3 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 rounded-full shadow-xl relative overflow-hidden"
-                animate={{
-                  boxShadow: [
-                    '0 10px 30px rgba(249, 115, 22, 0.4)',
-                    '0 15px 40px rgba(249, 115, 22, 0.6)',
-                    '0 10px 30px rgba(249, 115, 22, 0.4)',
-                  ],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              >
-                {/* Shine Effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                  animate={{
-                    x: ['-100%', '200%'],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                />
-                <p className="text-white text-lg min-[360px]:text-xl sm:text-2xl font-bold relative z-10">
-                  Coming Soon
-                </p>
-              </motion.div>
-            </motion.div>
-
-            {/* Email Registration Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="w-full max-w-md mb-6 sm:mb-8 px-2"
+              className="w-full max-w-md mb-6"
             >
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="text-center lg:text-left mb-4">
-                  <motion.p
-                    className="text-base min-[360px]:text-lg sm:text-xl text-gray-800 font-semibold mb-3"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
-                  >
-                    Register for Early Access and updates
-                  </motion.p>
-                  <motion.a
-                    href="mailto:contact@brahmakosh.com"
-                    className="inline-flex items-center justify-center lg:justify-start gap-2 text-orange-600 hover:text-orange-700 transition-colors font-medium text-sm min-[360px]:text-base sm:text-lg group"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Mail size={18} className="group-hover:animate-bounce" />
-                    <span className="break-all">contact@brahmakosh.com</span>
-                  </motion.a>
-                </div>
-
                 <div className="flex flex-col sm:flex-row gap-3">
                   <motion.input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 border-2 border-orange-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 text-gray-800 bg-white/90 backdrop-blur-sm shadow-md"
+                    disabled={loading}
+                    className="flex-1 px-4 py-3 bg-white/90 backdrop-blur-sm border-2 border-orange-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 text-gray-800 placeholder-gray-400 disabled:opacity-50 shadow-md"
                     required
                     whileFocus={{ scale: 1.02 }}
                   />
                   <motion.button
                     type="submit"
-                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all relative overflow-hidden group"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    disabled={loading || submitted}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group whitespace-nowrap"
+                    whileHover={{ scale: loading ? 1 : 1.05 }}
+                    whileTap={{ scale: loading ? 1 : 0.95 }}
                   >
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700"
@@ -284,14 +343,22 @@ function ComingSoon() {
                       whileHover={{ x: '0%' }}
                       transition={{ duration: 0.3 }}
                     />
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      {submitted ? (
+                    <span className="relative z-10 flex items-center justify-center gap-2 whitespace-nowrap">
+                      {loading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Registering...</span>
+                        </>
+                      ) : submitted ? (
                         <>
                           <Sparkles size={18} />
-                          Sent!
+                          <span>Registered!</span>
                         </>
                       ) : (
-                        'Register'
+                        <>
+                          <Rocket size={18} className="flex-shrink-0" />
+                          <span>Join the Waitlist</span>
+                        </>
                       )}
                     </span>
                   </motion.button>
@@ -299,28 +366,33 @@ function ComingSoon() {
               </form>
             </motion.div>
 
-            {/* Privacy Policy Link */}
+            {/* Legal Text */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="mt-4 sm:mt-8"
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-center lg:text-left mb-6"
             >
-              <Link
-                to="/privacy-policy"
-                className="text-sm text-gray-600 hover:text-orange-600 transition-colors underline font-medium"
-              >
-                Privacy Policy
-              </Link>
+              <p className="text-xs sm:text-sm text-gray-500">
+                By joining, you agree to our{' '}
+                <Link to="/privacy-policy" className="underline hover:text-orange-600 transition-colors">
+                  Terms of Use
+                </Link>{' '}
+                and{' '}
+                <Link to="/privacy-policy" className="underline hover:text-orange-600 transition-colors">
+                  Privacy Policy
+                </Link>
+                .
+              </p>
             </motion.div>
           </div>
 
-          {/* Right Side - Logo (Desktop) / Centered (Mobile) */}
+          {/* Right Side - Logo (Desktop) / Hidden (Mobile) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
-            className="mb-6 sm:mb-8 lg:mb-0 flex justify-center lg:justify-end relative lg:w-1/2 order-1 lg:order-2"
+            className="hidden lg:flex justify-center lg:justify-end relative lg:w-1/2 order-1 lg:order-2"
           >
             {/* Glow Effect */}
             <motion.div
@@ -341,7 +413,7 @@ function ComingSoon() {
             <motion.img
               src="/brahmakosh-logo.png"
               alt="Brahmakosh Logo"
-              className="w-48 h-48 min-[360px]:w-56 min-[360px]:h-72 sm:w-64 sm:h-80 lg:w-96 lg:h-[480px] xl:w-[520px] xl:h-[520px] object-contain relative z-10"
+              className="w-96 h-96 xl:w-[520px] xl:h-[520px] object-contain relative z-10"
               animate={{
                 rotate: [0, 5, -5, 0],
                 scale: [1, 1.05, 1],
@@ -402,17 +474,28 @@ function ComingSoon() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                    className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4"
+                    className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                      isDuplicate 
+                        ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                        : 'bg-gradient-to-r from-orange-500 to-orange-600'
+                    }`}
                   >
-                    <Sparkles className="text-white" size={32} />
+                    {isDuplicate ? (
+                      <Users className="text-white" size={32} />
+                    ) : (
+                      <Sparkles className="text-white" size={32} />
+                    )}
                   </motion.div>
                   
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Thank You!
+                    {isDuplicate ? "You're Already Registered!" : "Thank You!"}
                   </h2>
                   
                   <p className="text-gray-600 mb-6">
-                    Your registration request has been received. We'll notify you when early access opens.
+                    {isDuplicate 
+                      ? "You're already on our waitlist! We'll notify you when early access opens. Stay tuned for updates."
+                      : "Your registration request has been received. We'll notify you when early access opens."
+                    }
                   </p>
 
                   {/* Registered Users Count */}
@@ -436,4 +519,3 @@ function ComingSoon() {
 }
 
 export default ComingSoon
-
