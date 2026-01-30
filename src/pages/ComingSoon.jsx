@@ -227,7 +227,7 @@ function ComingSoon() {
                   {registeredCount.toLocaleString()}
                 </span>
                 <span className="text-base sm:text-lg text-gray-700">
-                  devotees waiting
+                 Divine Seeking
                 </span>
               </div>
             </motion.div>
