@@ -10,6 +10,7 @@ function ComingSoon() {
   const [submitted, setSubmitted] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [registeredCount, setRegisteredCount] = useState(12478)
+  const [displayCount, setDisplayCount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [isDuplicate, setIsDuplicate] = useState(false)
 
@@ -25,6 +26,56 @@ function ComingSoon() {
     }
     fetchCount()
   }, [])
+
+  // Animate the counter so it counts up smoothly and slows down near the target
+  useEffect(() => {
+    let frameId
+
+    const animate = () => {
+      setDisplayCount((prev) => {
+        if (prev === registeredCount) {
+          return prev
+        }
+
+        const remaining = registeredCount - prev
+        const absRemaining = Math.abs(remaining)
+
+        let step
+        if (absRemaining > 400) {
+          // Far from target (e.g. 0 → 12000): consistently fast but not too fast
+          step = 50
+        } else if (absRemaining > 80) {
+          // Between ~80 and 400: noticeably slower
+          step = 20
+        } else if (absRemaining > 3) {
+          // Between ~3 and 80: even slower
+          step = 5
+        } else {
+          // Last 3 numbers: one by one
+          step = 1
+        }
+
+        const next = prev + Math.sign(remaining) * step
+
+        // Clamp to exact target if we would overshoot
+        if ((remaining > 0 && next > registeredCount) || (remaining < 0 && next < registeredCount)) {
+          return registeredCount
+        }
+
+        return next
+      })
+
+      frameId = requestAnimationFrame(animate)
+    }
+
+    if (displayCount !== registeredCount) {
+      frameId = requestAnimationFrame(animate)
+    }
+
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId)
+    }
+  }, [registeredCount, displayCount])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -224,7 +275,7 @@ function ComingSoon() {
               <div className="bg-gradient-to-r from-orange-100 to-amber-100 rounded-full px-6 py-4 flex items-center justify-center gap-3 shadow-sm border border-orange-200">
                 <Sparkles className="text-orange-600 flex-shrink-0" size={24} />
                 <span className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  {registeredCount.toLocaleString()}
+                  {displayCount.toLocaleString()}
                 </span>
                 <span className="text-base sm:text-lg text-gray-700">
                  Divine Seeking
@@ -505,7 +556,7 @@ function ComingSoon() {
                       <span className="text-sm font-medium text-gray-700">Registered Users</span>
                     </div>
                     <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-700 bg-clip-text text-transparent">
-                      {registeredCount.toLocaleString()}
+                      {displayCount.toLocaleString()}
                     </p>
                   </div>
                 </div>
