@@ -99,7 +99,7 @@ BackgroundAnimations.displayName = 'BackgroundAnimations'
 
 function ComingSoon() {
   const [email, setEmail] = useState('')
-  const [platform, setPlatform] = useState('web')
+  const [platform, setPlatform] = useState('ios')
   const [submitted, setSubmitted] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [registeredCount, setRegisteredCount] = useState(12478)
